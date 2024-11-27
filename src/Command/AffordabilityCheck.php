@@ -1,6 +1,7 @@
 <?php
 namespace App\Command;
 
+use App\Helper\PropertyBatchHelper;
 use App\Helper\PropertyCsvParser;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +17,7 @@ class AffordabilityCheck extends Command
 {
     public function __construct(
         public readonly PropertyCsvParser $propertyCsvParser,
+        public readonly PropertyBatchHelper $propertyBatchHelper,
     ){
         parent::__construct();
     }
@@ -33,9 +35,11 @@ class AffordabilityCheck extends Command
         $bankStatementFile = $input->getArgument('bankStatementFile');
 
         $parsedProperties = $this->propertyCsvParser->parseFile($propertiesFile);
-        foreach ($parsedProperties as $property) {
-            $output->writeln($property);
-        }
+
+        // Adding new properties for future ocasions
+        $this->propertyBatchHelper->considerAddingProperties($output, $parsedProperties);
+        $output->writeln('Properties successfully added to the database.');
+        
         return Command::SUCCESS;
     }
 }
