@@ -1,8 +1,6 @@
 <?php
 namespace App\Command;
 
-use App\Helper\AffordablePropertyDisplayer;
-use App\Helper\AffordablePropertyFinder;
 use App\Helper\BankStatement\BankStatementCsvParser;
 use App\Helper\MonthlyExpensesCalculator;
 use App\Helper\MonthlyIncomeCalculator;
@@ -24,6 +22,8 @@ class AffordabilityCheck extends Command
 {
     public function __construct(
         public readonly BankStatementCsvParser $bankStatementCsvParser,
+        public readonly MonthlyIncomeCalculator $monthlyIncomeCalculator,
+        public readonly MonthlyExpensesCalculator $monthlyExpensesCalculator,
         public readonly PropertyBatchHelper $propertyBatchHelper,
         public readonly PropertyCsvParser $propertyCsvParser,
         public readonly RecurringTransactionIdentifier $recurringTransactionIdentifier,
@@ -60,6 +60,12 @@ class AffordabilityCheck extends Command
 
         // Identify monthly recurring income and expenses
         list($incomeTransactions, $expenseTransactions) = $this->recurringTransactionIdentifier->identifyRecurringTransaction($groupedTransactions);
+        
+        // Calculate total monthly recurring income        
+        $averageMonthlyIncome = $this->monthlyIncomeCalculator->calculate($incomeTransactions);
+
+        // Calculate total monthly recurring income        
+        $averageMonthlyExpenses = $this->monthlyExpensesCalculator->calculate($expenseTransactions);
     
         return Command::SUCCESS;
     }
