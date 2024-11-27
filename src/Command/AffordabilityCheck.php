@@ -1,6 +1,7 @@
 <?php
 namespace App\Command;
 
+use App\Helper\AffordablePropertyDisplayer;
 use App\Helper\AffordablePropertyFinder;
 use App\Helper\BankStatement\BankStatementCsvParser;
 use App\Helper\MonthlyExpensesCalculator;
@@ -22,6 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AffordabilityCheck extends Command
 {
     public function __construct(
+        public readonly AffordablePropertyDisplayer $affordablePropertyDisplayer,
         public readonly AffordablePropertyFinder $affordablePropertyFinder,
         public readonly BankStatementCsvParser $bankStatementCsvParser,
         public readonly MonthlyIncomeCalculator $monthlyIncomeCalculator,
@@ -71,6 +73,9 @@ class AffordabilityCheck extends Command
         
         // Perform affordability check
         $affordableProperties = $this->affordablePropertyFinder->getAffordableProperties($averageMonthlyIncome, $averageMonthlyExpenses);
+        
+        // Display afforable properties
+        $this->affordablePropertyDisplayer->display($affordableProperties, $output);
     
         return Command::SUCCESS;
     }
