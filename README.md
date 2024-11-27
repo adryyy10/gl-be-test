@@ -5,9 +5,10 @@
 - PHP 8.2
 - Symfony 6.4
 - Composer 2
-- PHPUnit 9.5
 - Docker 3.4
+- PHPUnit 9.5
 - CS fixer 3.65
+- PHPStan 2.0
 
 # Running the command
 
