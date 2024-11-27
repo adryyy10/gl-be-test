@@ -3,7 +3,11 @@
 # Requirements
 
 - PHP 8.2
+- Symfony 6.4
 - Composer 2
+- PHPUnit 9.5
+- Docker 3.4
+- CS fixer 3.65
 
 # Running the command
 
@@ -21,7 +25,17 @@ $ composer install
 $ http://localhost:8090/
 ```
 
-- `bin/console app:affordability-check ./files/bank_statement.csv ./files/properties.csv`
+## CS fixer
+
+```bash
+$ ./vendor/bin/php-cs-fixer fix src
+```
+
+## Command run
+
+```bash
+$ bin/console app:affordability-check ./files/bank_statement.csv ./files/properties.csv
+```
 
 # Running the tests
 

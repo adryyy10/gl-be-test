@@ -7,13 +7,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class that helps to batch persist new entities
+ * Class that helps to batch persist new entities.
  */
 class PropertyBatchHelper
 {
     public function __construct(
-      private readonly EntityManagerInterface $entityManager
-    ) {}
+        private readonly EntityManagerInterface $entityManager,
+    ) {
+    }
 
     public function considerAddingProperties(OutputInterface $output, array $properties, int $batchSize = 20): void
     {
@@ -33,7 +34,7 @@ class PropertyBatchHelper
             $output->writeln('Inserted property with id: '.$propertyData[0]);
 
             // Flush and clear in batches
-            if ($index % $batchSize === 0) {
+            if (0 === $index % $batchSize) {
                 $this->entityManager->flush();
                 $this->entityManager->clear();
             }

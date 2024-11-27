@@ -15,12 +15,11 @@ class TransactionGrouper
 
         foreach ($parsedTransactions as $transaction) {
             $month = $transaction[0]->format('Y-m'); // date
-            $key = $transaction[1] . '|' . $transaction[2]; // Payment Type + Details
+            $key = $transaction[1].'|'.$transaction[2]; // Payment Type + Details
 
             $transactionGroups[$key][$month][] = $transaction;
         }
 
         return $transactionGroups;
     }
-
 }

@@ -14,14 +14,14 @@ class AffordablePropertyFinder
     private const MININUM_RENT_PARAMETER = 1.25;
 
     public function __construct(
-        public readonly EntityManagerInterface $entityManager
-    )
-    {}
+        public readonly EntityManagerInterface $entityManager,
+    ) {
+    }
 
     /**
      * Determines affordable properties based on average monthly income and expenses.
      *
-     * @return Property[] An array of Property entities that the user can afford.
+     * @return Property[] an array of Property entities that the user can afford
      */
     public function getAffordableProperties(float $averageMonthlyIncome, float $averageMonthlyExpenses): array
     {
@@ -36,5 +36,5 @@ class AffordablePropertyFinder
         }
 
         return $affordableProperties;
-    } 
+    }
 }

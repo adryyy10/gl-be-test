@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Command;
 
 use App\Helper\AffordablePropertyDisplayer;
@@ -32,7 +33,7 @@ class AffordabilityCheck extends Command
         public readonly PropertyCsvParser $propertyCsvParser,
         public readonly RecurringTransactionIdentifier $recurringTransactionIdentifier,
         public readonly TransactionGrouper $transactionGrouper,
-    ){
+    ) {
         parent::__construct();
     }
 
@@ -64,19 +65,19 @@ class AffordabilityCheck extends Command
 
         // Identify monthly recurring income and expenses
         list($incomeTransactions, $expenseTransactions) = $this->recurringTransactionIdentifier->identifyRecurringTransaction($groupedTransactions);
-        
-        // Calculate total monthly recurring income        
+
+        // Calculate total monthly recurring income
         $averageMonthlyIncome = $this->monthlyIncomeCalculator->calculate($incomeTransactions);
 
-        // Calculate total monthly recurring income        
+        // Calculate total monthly recurring income
         $averageMonthlyExpenses = $this->monthlyExpensesCalculator->calculate($expenseTransactions);
-        
+
         // Perform affordability check
         $affordableProperties = $this->affordablePropertyFinder->getAffordableProperties($averageMonthlyIncome, $averageMonthlyExpenses);
-        
+
         // Display afforable properties
         $this->affordablePropertyDisplayer->display($affordableProperties, $output);
-    
+
         return Command::SUCCESS;
     }
 }
