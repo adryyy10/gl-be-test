@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Helper;
+namespace App\Tests\Helper\Property;
 
 use App\Entity\Property;
-use App\Helper\PropertyBatchHelper;
+use App\Helper\Property\PropertyBatchHelper;
 use App\Repository\PropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;

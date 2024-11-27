@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper;
+namespace App\Helper\Property;
 
 use App\Entity\Property;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +18,7 @@ class PropertyBatchHelper
     public function considerAddingProperties(OutputInterface $output, array $properties, int $batchSize = 20): void
     {
         foreach ($properties as $index => $propertyData) {
-            // Check property hasn't been added yet
+            // Skip loop if property already added
             $existingProperty = $this->entityManager->getRepository(Property::class)->find($propertyData[0]);
             if ($existingProperty) {
                 $output->writeln('Property already inserted');

@@ -1,18 +1,28 @@
 <?php
 
-namespace App\Helper;
+namespace App\Helper\Property;
 
+use App\Helper\FileOpener;
 use App\Interface\CsvParser;
-use RuntimeException;
 
 class PropertyCsvParser implements CsvParser
 {
+  public function __construct(
+    public readonly FileOpener $fileOpener
+  ){}
+
+  /**
+   * Parses property CSV file
+   *
+   * @param string $filePath Path to the file.
+   * @return array $properties.
+   * @throws RuntimeException if the file cannot be opened.
+   */
   public function parseFile(string $filePath): array
   {
     $properties = [];
-    if (($handle = @fopen($filePath, 'r')) === false) {
-      throw new RuntimeException(sprintf('Failed to open the file: %s', $filePath));
-    }
+
+    $handle = $this->fileOpener->open($filePath);
 
     fgetcsv($handle); // Skip header
     while (($property = fgetcsv($handle)) !== false) {
