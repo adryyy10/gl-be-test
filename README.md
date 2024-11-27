@@ -15,6 +15,12 @@ $ docker-compose up -d
 $ composer install
 ```
 
+# Check database
+```bash
+# I have added a DB management tool such as Adminer in the Docker build
+$ http://localhost:8090/
+```
+
 - `bin/console app:affordability-check ./files/bank_statement.csv ./files/properties.csv`
 
 # Running the tests

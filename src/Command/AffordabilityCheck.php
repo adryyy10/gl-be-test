@@ -1,7 +1,7 @@
 <?php
 namespace App\Command;
 
-use App\helper\PropertyCsvParser;
+use App\Helper\PropertyCsvParser;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,6 +14,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class AffordabilityCheck extends Command
 {
+    public function __construct(
+        public readonly PropertyCsvParser $propertyCsvParser,
+    ){
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this
@@ -26,6 +32,10 @@ class AffordabilityCheck extends Command
         $propertiesFile = $input->getArgument('propertiesFile');
         $bankStatementFile = $input->getArgument('bankStatementFile');
 
+        $parsedProperties = $this->propertyCsvParser->parseFile($propertiesFile);
+        foreach ($parsedProperties as $property) {
+            $output->writeln($property);
+        }
         return Command::SUCCESS;
     }
 }

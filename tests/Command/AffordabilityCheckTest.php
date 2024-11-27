@@ -20,6 +20,7 @@ class AffordabilityCheckTest extends KernelTestCase
         self::bootKernel();
         $application = new Application(self::$kernel);
         $command = $application->find('app:affordability-check');
+
         $this->commandTester = new CommandTester($command);   
     }
 
