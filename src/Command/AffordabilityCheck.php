@@ -1,6 +1,7 @@
 <?php
 namespace App\Command;
 
+use App\Helper\AffordablePropertyFinder;
 use App\Helper\BankStatement\BankStatementCsvParser;
 use App\Helper\MonthlyExpensesCalculator;
 use App\Helper\MonthlyIncomeCalculator;
@@ -21,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AffordabilityCheck extends Command
 {
     public function __construct(
+        public readonly AffordablePropertyFinder $affordablePropertyFinder,
         public readonly BankStatementCsvParser $bankStatementCsvParser,
         public readonly MonthlyIncomeCalculator $monthlyIncomeCalculator,
         public readonly MonthlyExpensesCalculator $monthlyExpensesCalculator,
@@ -66,6 +68,9 @@ class AffordabilityCheck extends Command
 
         // Calculate total monthly recurring income        
         $averageMonthlyExpenses = $this->monthlyExpensesCalculator->calculate($expenseTransactions);
+        
+        // Perform affordability check
+        $affordableProperties = $this->affordablePropertyFinder->getAffordableProperties($averageMonthlyIncome, $averageMonthlyExpenses);
     
         return Command::SUCCESS;
     }
