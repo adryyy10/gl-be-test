@@ -26,6 +26,7 @@ class AffordabilityCheck extends Command
         public readonly BankStatementCsvParser $bankStatementCsvParser,
         public readonly PropertyBatchHelper $propertyBatchHelper,
         public readonly PropertyCsvParser $propertyCsvParser,
+        public readonly RecurringTransactionIdentifier $recurringTransactionIdentifier,
         public readonly TransactionGrouper $transactionGrouper,
     ){
         parent::__construct();
@@ -56,6 +57,10 @@ class AffordabilityCheck extends Command
 
         // Group transactions by month and details
         $groupedTransactions = $this->transactionGrouper->groupByMonthAndDetails($parsedTransactions);
+
+        // Identify monthly recurring income and expenses
+        list($incomeTransactions, $expenseTransactions) = $this->recurringTransactionIdentifier->identifyRecurringTransaction($groupedTransactions);
+    
         return Command::SUCCESS;
     }
 }

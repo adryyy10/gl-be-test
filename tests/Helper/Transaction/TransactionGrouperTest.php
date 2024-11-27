@@ -23,7 +23,7 @@ class TransactionGrouperTest extends TestCase
         $this->assertEmpty($result, 'Grouping an empty transaction list should return an empty array.');
     }
 
-    public function testGroupByMonthAndDetailsWithSingleTransaction(): void
+    public function testGroupByMonthAndDetailsSingleTransaction(): void
     {
         $parsedTransactions = [
             [new \DateTime('2023-10-15'), PaymentType::CARD_PAYMENT->value, 'Credit Card Bill', 50.0],
@@ -42,7 +42,7 @@ class TransactionGrouperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGroupByMonthAndDetailsWithMultipleTransactions(): void
+    public function testGroupByMonthAndDetailsMultipleTransactions(): void
     {
         $parsedTransactions = [
             [new \DateTime('2023-10-15'), PaymentType::CARD_PAYMENT->value, 'Credit Card Bill', 50.0],
