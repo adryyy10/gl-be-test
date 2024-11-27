@@ -7,7 +7,13 @@
 
 # Running the command
 
-After running `composer install`:
+```bash
+# Start docker containers
+$ docker-compose up -d
+
+# Install dependencies
+$ composer install
+```
 
 - `bin/console app:affordability-check ./files/bank_statement.csv ./files/properties.csv`
 
