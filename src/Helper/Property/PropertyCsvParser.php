@@ -13,9 +13,11 @@ class PropertyCsvParser extends BaseCsvParser implements CsvParser
         fgetcsv($handle); // Skip header
 
         while (($row = fgetcsv($handle)) !== false) {
+            list($address, $postcode) = explode(',', $row[1]);
             $properties[] = [
                 (int) $row[0],
-                $row[1],
+                $address,
+                trim($postcode),
                 (int) $row[2],
             ];
         }
