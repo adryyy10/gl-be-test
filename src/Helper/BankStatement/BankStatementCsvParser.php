@@ -2,20 +2,13 @@
 
 namespace App\Helper\BankStatement;
 
-use App\Helper\FileOpener;
-use App\Interface\CsvParser;
+use App\Helper\BaseCsvParser;
 
-class BankStatementCsvParser implements CsvParser
+class BankStatementCsvParser extends BaseCsvParser
 {
-    public function __construct(
-        public readonly FileOpener $fileOpener,
-    ) {
-    }
 
-    public function parseFile(string $filePath): array
+    protected function parseRows($handle): array
     {
-        $handle = $this->fileOpener->open($filePath);
-
         $transactions = [];
 
         // Skip the unnecessary lines at the top
@@ -38,7 +31,6 @@ class BankStatementCsvParser implements CsvParser
             $transactions[] = [$date, $paymentType, $details, $moneyOut, $moneyIn, $balance];
             // $transactions[] = new Transaction($date, $paymentType, $details, $moneyOut, $moneyIn);
         }
-        fclose($handle);
 
         return $transactions;
     }
