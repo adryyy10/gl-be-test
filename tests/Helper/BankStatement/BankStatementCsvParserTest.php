@@ -29,27 +29,27 @@ class BankStatementCsvParserTest extends KernelTestCase
         $this->assertNotEmpty($transactions);
 
         // Date
-        $this->assertNotNull($transactions[0][0]);
-        $this->assertEquals($transactions[0][0]->format('Y-m-d'), '2016-10-01');
+        $this->assertNotNull($transactions[0][0][0]);
+        $this->assertEquals($transactions[0][0][0]->format('Y-m-d'), '2016-10-01');
 
         // Payment type
-        $this->assertIsString($transactions[0][1]);
-        $this->assertEquals($transactions[0][1], 'ATM');
+        $this->assertIsString($transactions[0][0][1]);
+        $this->assertEquals($transactions[0][0][1], 'ATM');
 
         // Address
-        $this->assertIsString($transactions[0][2]);
-        $this->assertEquals($transactions[0][2], 'High Street, 11:22am');
+        $this->assertIsString($transactions[0][0][2]);
+        $this->assertEquals($transactions[0][0][2], 'High Street, 11:22am');
 
         // Money Out
-        $this->assertIsFloat($transactions[0][3]);
-        $this->assertEquals($transactions[0][3], 10.0);
+        $this->assertIsFloat($transactions[0][0][3]);
+        $this->assertEquals($transactions[0][0][3], 10.0);
 
         // Money In
-        $this->assertIsFloat($transactions[0][4]);
-        $this->assertEquals($transactions[0][4], 0.0);
+        $this->assertIsFloat($transactions[0][0][4]);
+        $this->assertEquals($transactions[0][0][4], 0.0);
 
         // Balance
-        $this->assertIsFloat($transactions[0][5]);
-        $this->assertEquals($transactions[0][5], 1173.0);
+        $this->assertIsFloat($transactions[0][0][5]);
+        $this->assertEquals($transactions[0][0][5], 1173.0);
     }
 }

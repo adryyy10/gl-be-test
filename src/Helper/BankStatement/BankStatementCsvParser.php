@@ -26,12 +26,18 @@ class BankStatementCsvParser extends BaseCsvParser
             fgetcsv($handle);
         }
 
+        $differentMonths = [];
         while (($data = fgetcsv($handle)) !== false) {
             if (empty(array_filter($data))) {
                 continue; // Skip possible empty lines
             }
 
             $date = \DateTime::createFromFormat('jS F Y', $data[0]);
+
+            if (!array_key_exists($date->format('Y-m'), $differentMonths)) {
+                $differentMonths[$date->format('Y-m')] = true;
+            }
+
             $paymentType = $data[1];
             $details = $data[2];
             $moneyOut = $this->moneyRowParser->parse($data[3]);
@@ -39,9 +45,8 @@ class BankStatementCsvParser extends BaseCsvParser
             $balance = $this->moneyRowParser->parse($data[5]);
 
             $transactions[] = [$date, $paymentType, $details, $moneyOut, $moneyIn, $balance];
-            // $transactions[] = new Transaction($date, $paymentType, $details, $moneyOut, $moneyIn);
         }
 
-        return $transactions;
+        return [$transactions, count($differentMonths)];
     }
 }

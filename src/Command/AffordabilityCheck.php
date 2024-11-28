@@ -57,7 +57,7 @@ class AffordabilityCheck extends Command
 
         // Parse bank statement
         $bankStatementFile = $input->getArgument('bankStatementFile');
-        $parsedTransactions = $this->bankStatementCsvParser->parseFile($bankStatementFile);
+        list($parsedTransactions, $differentMonths) = $this->bankStatementCsvParser->parseFile($bankStatementFile);
         $output->writeln('Bank statement successfully parsed.');
 
         // Group transactions by month and details
@@ -67,10 +67,10 @@ class AffordabilityCheck extends Command
         list($incomeTransactions, $expenseTransactions) = $this->recurringTransactionIdentifier->identifyRecurringTransaction($groupedTransactions);
 
         // Calculate total monthly recurring income
-        $averageMonthlyIncome = $this->monthlyIncomeCalculator->calculate($incomeTransactions);
+        $averageMonthlyIncome = $this->monthlyIncomeCalculator->calculate($incomeTransactions, $differentMonths);
 
         // Calculate total monthly recurring income
-        $averageMonthlyExpenses = $this->monthlyExpensesCalculator->calculate($expenseTransactions);
+        $averageMonthlyExpenses = $this->monthlyExpensesCalculator->calculate($expenseTransactions, $differentMonths);
 
         // Perform affordability check
         $affordableProperties = $this->affordablePropertyFinder->getAffordableProperties($averageMonthlyIncome, $averageMonthlyExpenses);
