@@ -3,9 +3,19 @@
 namespace App\Helper\BankStatement;
 
 use App\Helper\BaseCsvParser;
+use App\Helper\FileOpener;
+use App\Helper\MoneyRowParser;
 
 class BankStatementCsvParser extends BaseCsvParser
 {
+
+    public function __construct(
+        FileOpener $fileOpener,
+        public readonly MoneyRowParser $moneyRowParser,
+    )
+    {
+        parent::__construct($fileOpener);
+    }
 
     protected function parseRows($handle): array
     {
@@ -24,9 +34,9 @@ class BankStatementCsvParser extends BaseCsvParser
             $date = \DateTime::createFromFormat('jS F Y', $data[0]);
             $paymentType = $data[1];
             $details = $data[2];
-            $moneyOut = !empty($data[3]) ? (float) str_replace(['£', ','], '', $data[3]) : 0.0;
-            $moneyIn = !empty($data[4]) ? (float) str_replace(['£', ','], '', $data[4]) : 0.0;
-            $balance = !empty($data[5]) ? (float) str_replace(['£', ','], '', $data[5]) : 0.0;
+            $moneyOut = $this->moneyRowParser->parse($data[3]);
+            $moneyIn = $this->moneyRowParser->parse($data[4]);
+            $balance = $this->moneyRowParser->parse($data[5]);
 
             $transactions[] = [$date, $paymentType, $details, $moneyOut, $moneyIn, $balance];
             // $transactions[] = new Transaction($date, $paymentType, $details, $moneyOut, $moneyIn);

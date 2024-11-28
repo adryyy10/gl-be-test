@@ -4,11 +4,9 @@ namespace App\Helper;
 
 abstract class BaseCsvParser
 {
-    protected FileOpener $fileOpener;
-
-    public function __construct(FileOpener $fileOpener)
+    public function __construct(
+        public readonly FileOpener $fileOpener)
     {
-        $this->fileOpener = $fileOpener;
     }
 
     public function parseFile(string $filePath): array
