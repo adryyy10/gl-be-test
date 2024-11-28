@@ -31,10 +31,14 @@ class PropertyCsvParserTest extends KernelTestCase
 
         // Address
         $this->assertIsString($properties[0][1]);
-        $this->assertEquals($properties[0][1], '99  Brackley Road, KW17 9QS');
+        $this->assertEquals($properties[0][1], '99  Brackley Road');
+
+        // Postcode
+        $this->assertIsString($properties[0][2]);
+        $this->assertEquals($properties[0][2], 'KW17 9QS');
 
         // Price
-        $this->assertIsInt($properties[0][2]);
-        $this->assertEquals($properties[0][2], 300);
+        $this->assertIsInt($properties[0][3]);
+        $this->assertEquals($properties[0][3], 300);
     }
 }

@@ -2,17 +2,10 @@
 
 namespace App\Helper;
 
-use App\Interface\MonthlyCalculatorInterface;
-
-class MonthlyExpensesCalculator implements MonthlyCalculatorInterface
+class MonthlyExpensesCalculator extends BaseMonthlyCalculator
 {
-    public function calculate(array $expenseTransactions, int $months = 2): int
+    public function getRelevantField(array $transaction): string
     {
-        $totalRecurringExpenses = 0.0;
-        foreach ($expenseTransactions as $transaction) {
-            $totalRecurringExpenses += $transaction[3]; // Money out
-        }
-
-        return $totalRecurringExpenses / $months;
+        return $transaction[3];
     }
 }

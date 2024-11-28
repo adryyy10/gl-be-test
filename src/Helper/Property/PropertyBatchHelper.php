@@ -28,7 +28,8 @@ class PropertyBatchHelper
 
             $property = new Property();
             $property->setAddress($propertyData[1]);
-            $property->setPrice($propertyData[2]);
+            $property->setPostcode($propertyData[2]);
+            $property->setPrice($propertyData[3]);
 
             $this->entityManager->persist($property);
             $output->writeln('Inserted property with id: '.$propertyData[0]);

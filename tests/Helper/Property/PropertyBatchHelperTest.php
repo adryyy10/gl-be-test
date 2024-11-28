@@ -32,8 +32,8 @@ class PropertyBatchHelperTest extends TestCase
     public function testInsertNewProperties(): void
     {
         $properties = [
-            [1, '123 Fake Street', 100],
-            [2, '456 Test Street', 200],
+            [1, '123 Fake Street', 'NW2', 100],
+            [2, '456 Test Street', 'NW2', 200],
         ];
 
         // There are no properties in DB yet so it should return null

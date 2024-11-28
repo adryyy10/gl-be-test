@@ -13,18 +13,21 @@ class RecurringTransactionIdentifier
     {
         $incomeTransactions = [];
         $expenseTransactions = [];
-        foreach ($groupedTransactions as $group => $months) {
-            if (count($months) >= 2) { // Appears in at least two months
-                foreach ($months as $month => $transactionsInMonth) {
-                    foreach ($transactionsInMonth as $transaction) {
-                        if ($transaction[4] > 0) { // $transaction[4] = Money In
-                            $incomeTransactions[] = $transaction;
-                        } elseif ($transaction[3] > 0) { // $transaction[3] = Money Out
-                            $expenseTransactions[] = $transaction;
-                        }
-                    }
-                }
-            }
+
+        $recurringGroups = array_filter($groupedTransactions, fn($months) => count($months) >= 2);
+        
+        foreach ($recurringGroups as $months) {
+            $allTransactions = array_merge(...array_values($months)); // Flatten array
+
+            $incomeTransactions = array_merge(
+                $incomeTransactions,
+                array_filter($allTransactions, fn($transaction) => $transaction[4] > 0) // Filter Money In
+            );
+
+            $expenseTransactions = array_merge(
+                $expenseTransactions,
+                array_filter($allTransactions, fn($transaction) => $transaction[3] > 0) // Filter Money Out
+            );
         }
 
         return [$incomeTransactions, $expenseTransactions];

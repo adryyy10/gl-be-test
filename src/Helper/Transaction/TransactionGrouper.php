@@ -11,15 +11,17 @@ class TransactionGrouper
 {
     public function groupByMonthAndDetails(array $parsedTransactions): array
     {
-        $transactionGroups = [];
+        return array_reduce(
+            $parsedTransactions,
+            function (array $transactionGroups, array $transaction): array {
+                $month = $transaction[0]->format('Y-m'); // date
+                $key = $transaction[1].'|'.$transaction[2]; // Payment Type + Details
+    
+                $transactionGroups[$key][$month][] = $transaction;
 
-        foreach ($parsedTransactions as $transaction) {
-            $month = $transaction[0]->format('Y-m'); // date
-            $key = $transaction[1].'|'.$transaction[2]; // Payment Type + Details
-
-            $transactionGroups[$key][$month][] = $transaction;
-        }
-
-        return $transactionGroups;
+                return $transactionGroups;
+            },
+            [],
+        );
     }
 }

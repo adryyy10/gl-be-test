@@ -25,16 +25,10 @@ class AffordablePropertyFinder
      */
     public function getAffordableProperties(float $averageMonthlyIncome, float $averageMonthlyExpenses): array
     {
-        $affordableProperties = [];
+        $netIncome = $averageMonthlyIncome - $averageMonthlyExpenses;
 
         $properties = $this->entityManager->getRepository(Property::class)->findAll();
-        foreach ($properties as $property) {
-            $netIncome = $averageMonthlyIncome - $averageMonthlyExpenses;
-            if ($netIncome >= $property->getPrice() * self::MININUM_RENT_PARAMETER) {
-                $affordableProperties[] = $property;
-            }
-        }
 
-        return $affordableProperties;
+        return array_filter($properties, fn($property) => $netIncome >= $property->getPrice() * self::MININUM_RENT_PARAMETER);
     }
 }

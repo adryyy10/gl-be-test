@@ -2,20 +2,23 @@
 
 namespace App\Helper\BankStatement;
 
+use App\Helper\BaseCsvParser;
 use App\Helper\FileOpener;
-use App\Interface\CsvParser;
+use App\Helper\MoneyRowParser;
 
-class BankStatementCsvParser implements CsvParser
+class BankStatementCsvParser extends BaseCsvParser
 {
+
     public function __construct(
-        public readonly FileOpener $fileOpener,
-    ) {
+        FileOpener $fileOpener,
+        public readonly MoneyRowParser $moneyRowParser,
+    )
+    {
+        parent::__construct($fileOpener);
     }
 
-    public function parseFile(string $filePath): array
+    protected function parseRows($handle): array
     {
-        $handle = $this->fileOpener->open($filePath);
-
         $transactions = [];
 
         // Skip the unnecessary lines at the top
@@ -23,23 +26,27 @@ class BankStatementCsvParser implements CsvParser
             fgetcsv($handle);
         }
 
+        $differentMonths = [];
         while (($data = fgetcsv($handle)) !== false) {
             if (empty(array_filter($data))) {
                 continue; // Skip possible empty lines
             }
 
             $date = \DateTime::createFromFormat('jS F Y', $data[0]);
+
+            if (!array_key_exists($date->format('Y-m'), $differentMonths)) {
+                $differentMonths[$date->format('Y-m')] = true;
+            }
+
             $paymentType = $data[1];
             $details = $data[2];
-            $moneyOut = !empty($data[3]) ? (float) str_replace(['£', ','], '', $data[3]) : 0.0;
-            $moneyIn = !empty($data[4]) ? (float) str_replace(['£', ','], '', $data[4]) : 0.0;
-            $balance = !empty($data[5]) ? (float) str_replace(['£', ','], '', $data[5]) : 0.0;
+            $moneyOut = $this->moneyRowParser->parse($data[3]);
+            $moneyIn = $this->moneyRowParser->parse($data[4]);
+            $balance = $this->moneyRowParser->parse($data[5]);
 
             $transactions[] = [$date, $paymentType, $details, $moneyOut, $moneyIn, $balance];
-            // $transactions[] = new Transaction($date, $paymentType, $details, $moneyOut, $moneyIn);
         }
-        fclose($handle);
 
-        return $transactions;
+        return [$transactions, count($differentMonths)];
     }
 }

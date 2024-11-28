@@ -16,6 +16,9 @@ class Property
     #[ORM\Column(length: 255)]
     private string $address;
 
+    #[ORM\Column(length: 255)]
+    private string $postcode;
+
     #[ORM\Column]
     private float $price;
 
@@ -32,6 +35,18 @@ class Property
     public function setAddress(string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostcode(): ?string
+    {
+        return $this->postcode;
+    }
+
+    public function setPostcode(string $postcode): static
+    {
+        $this->postcode = $postcode;
 
         return $this;
     }
